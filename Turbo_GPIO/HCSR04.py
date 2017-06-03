@@ -13,8 +13,8 @@ class HCSR04(object):
 		self._logger.debug('echo = 0x{0:2x}'.format(self._echo ))
 		self._logger.debug('trig= 0x{0:2x}'.format(self._trig))
 		GPIO.setwarnings(False)
-		GPIO.setmode(GPIO.BCM)                     #Set GPIO pin numbering 
 	def read_distance(self):
+		GPIO.setmode(GPIO.BCM)                     #Set GPIO pin numbering 
 		self._logger.debug('read_distance')
 		GPIO.setup(self._trig,GPIO.OUT)                  #Set pin as GPIO out
 		GPIO.setup(self._echo,GPIO.IN)                   #Set pin as GPIO in
@@ -32,15 +32,17 @@ class HCSR04(object):
 
 		while GPIO.input(self._echo)==1:               #Check whether the ECHO is HIGH
 			pulse_end = time.time()                #Saves the last known time of HIGH pulse 
-
+		GPIO.cleanup()
 		pulse_duration = pulse_end - pulse_start #Get pulse duration to a variable
+		self._logger.debug('Duration: {0}'.format(pulse_duration))  
 
 		distance = pulse_duration * 17150        #Multiply pulse duration by 17150 to get distance
 		distance = round(distance, 2)            #Round to two decimal points
 
 		if distance > 2 and distance < 400:      #Check whether the distance is within range
-			self._logger.debug("Distance:",distance - 0.5,"cm")  #Print distance with 0.5 cm calibration
+			self._logger.debug('Distance:{0} cm'.format(distance - 0.5))  #Print distance with 0.5 cm calibration
 			return distance
 		else:
 			self._logger.debug("Out Of Range")                   #display out of range
+			self._logger.debug('Distance:{0} cm'.format(distance - 0.5))  #Print distance with 0.5 cm calibration
 			return -1

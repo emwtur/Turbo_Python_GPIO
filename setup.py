@@ -11,7 +11,7 @@ if sys.platform != 'win32' and sys.platform != 'darwin':
     requires.append('spidev')
 
 setup(name              = 'TURBO_GPIO',
-      version           = '0.1.2',
+      version           = '0.1.3',
       author            = 'Per-Eric Larsson',
       author_email      = 'per-eric.larsson@densomlever.se',
       description       = '.',
